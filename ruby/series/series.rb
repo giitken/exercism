@@ -7,11 +7,7 @@ class Series
 
   def slices(per_length)
     raise ArgumentError if exceed_params_size?(per_length)
-    [*0..digit_str.size].inject([]) do |str, t|
-      sliced = digit_str.slice(t, per_length)
-      return str unless sliced.size == per_length
-      str.push(sliced)
-    end
+    digit_str.chars.each_cons(per_length).to_a.map(&:join)
   end
 
   def exceed_params_size?(per_length)
