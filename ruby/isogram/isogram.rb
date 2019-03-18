@@ -1,5 +1,6 @@
 class Isogram
   def self.isogram?(input)
-    input.scan(/\w/).size == input.downcase.scan(/\w/).uniq.size
+    chars = input.downcase.scan(/[a-z]/)
+    chars.size == chars.uniq.size
   end
 end
