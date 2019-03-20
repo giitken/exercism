@@ -1,16 +1,13 @@
 class Scrabble
 
-  SCORE = {1 => %w(A E I O U L N R S T),
-           2 => %w(D G),
-           3 => %w(B C M P),
-           4 => %w(F H V W Y),
-           5 => %w(K),
-           8 => %w(J X),
-           10 => %w(Q Z)}
+  SCORE = %w{AEILNORSTU DG BCMP FHVWY K JX QZ}
+              .zip([1, 2, 3, 4, 5, 8, 10])
+              .flat_map {|letters, score| letters.chars.product([score])}
+              .to_h
 
   def initialize(chars)
-    alfabets = chars.nil? ? [] : chars.upcase.scan(/\w/)
-    @sum = alfabets.inject(0) {|sum, char| sum + aggregate(char)}
+    letters = chars.to_s.upcase.scan(/\w/)
+    @sum = letters.map {|letter| SCORE[letter]}.sum
   end
 
   def score
@@ -19,12 +16,6 @@ class Scrabble
 
   def self.score(chars)
     self.new(chars).score
-  end
-
-  private
-
-  def aggregate(char)
-    SCORE.find {|k, v| v.include?(char)}.first
   end
 
 end
