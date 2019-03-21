@@ -7,7 +7,7 @@ class Scrabble
 
   def initialize(chars)
     letters = chars.to_s.upcase.scan(/\w/)
-    @sum = letters.map {|letter| SCORE[letter]}.sum
+    @sum = letters.sum(&SCORE)
   end
 
   def score
