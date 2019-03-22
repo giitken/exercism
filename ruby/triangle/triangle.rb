@@ -2,18 +2,19 @@ class Triangle
 
   def initialize(sides)
     @sides = sides
+    @unique_sides = @sides.uniq.size
   end
 
   def equilateral?
-    @sides.uniq.size == 1 && valid?
+    @unique_sides == 1 && valid?
   end
 
   def isosceles?
-    @sides.uniq.size <= 2 && valid?
+    @unique_sides <= 2 && valid?
   end
 
   def scalene?
-    @sides.uniq.size == 3 && valid?
+    @unique_sides == 3 && valid?
   end
 
   private
@@ -22,4 +23,5 @@ class Triangle
     a, b, c = @sides.sort
     a > 0 && c <= a + b
   end
+
 end
