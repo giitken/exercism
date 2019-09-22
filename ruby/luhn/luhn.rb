@@ -1,39 +1,33 @@
 class Luhn
-  attr_reader :digits
+  MORE_THAN_DOUBLE_FIGURES = /\A\d{2,}\z/
+  SUM_DIVISOR = 10
+  TWO_DIGIT_BOUNDARY = 10
 
-  def initialize(digits)
-    @digits = digits.reverse.gsub(/\s/, '')
+  def self.valid?(num)
+    new(num).valid?
+  end
+
+  def initialize(num)
+    @num = num.delete(' ')
   end
 
   def valid?
-    return false unless digits.match?(TWO_OR_MORE_DIGITS)
-
-    (sum_total % 10).zero? && is_more_than_double?
-  end
-
-  def self.valid?(digits)
-    new(digits).valid?
+    (sum_total % SUM_DIVISOR).zero? && num.match?(MORE_THAN_DOUBLE_FIGURES)
   end
 
   private
 
-  TWO_OR_MORE_DIGITS = /\A\d{2,}\z/
+  attr_reader :num
 
-  def divided_digits
-    @divided_digits ||= digits.chars.map(&:to_i)
+  def digits
+    @digits ||= num.reverse.each_char.map(&:to_i)
   end
 
   def sum_total
-    @total ||= divided_digits.each_slice(2).sum { |first_digit, last_digit| first_digit + double(last_digit) }
+    @total ||= digits.each_slice(2).sum { |first_digit, last_digit = 0| first_digit + double(last_digit) }
   end
 
   def double(last_digit)
-    return 0 if last_digit.nil?
-
-    (num = last_digit * 2) > 9 ? num - 9 : num
-  end
-
-  def is_more_than_double?
-    digits.length > 1
+    (num = last_digit * 2) < TWO_DIGIT_BOUNDARY ? num : num - 9
   end
 end
